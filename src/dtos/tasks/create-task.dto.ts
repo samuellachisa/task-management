@@ -1,7 +1,10 @@
 import { TaskStatus } from 'src/constants/enums';
-
+import { IsNotEmpty, IsEnum } from 'class-validator';
 export class CreateTaskDto {
+  @IsNotEmpty()
   readonly title: string;
+  @IsNotEmpty()
   readonly description: string;
-  readonly status: TaskStatus.OPEN;
+  @IsEnum(TaskStatus)
+  readonly status: TaskStatus;
 }
