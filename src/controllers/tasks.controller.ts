@@ -18,7 +18,7 @@ import { GetTasksFilterDto } from 'src/dtos/tasks/get-tasks-filter.dto';
 export class TasksController {
   constructor(private taskService: TasksService) {}
   @Get()
-  getAllTasks(@Query() filterDto: GetTasksFilterDto): Task[] {
+  getAllTasks(@Query() filterDto: GetTasksFilterDto) {
     if (Object.keys(filterDto).length) {
       return this.taskService.getAllTasksWithFilter(filterDto);
     } else {
@@ -26,22 +26,23 @@ export class TasksController {
     }
   }
   @Get('/:id')
-  getTaskById(@Param('id') id: number): Task {
+  getTaskById(@Param('id') id: number): Promise<Task> {
     return this.taskService.getTaskById(id);
   }
+
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): Task {
-    return this.taskService.createTasks(createTaskDto);
+  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.taskService.createTask(createTaskDto);
   }
   @Patch('/:id')
   updateTask(
     @Param('id') id: number,
     @Body() updateTaskDto: UpdateTaskDto,
-  ): Task {
+  ): Promise<Task> {
     return this.taskService.updateTask(id, updateTaskDto);
   }
   @Delete('/:id')
-  deleteTask(@Param('id') id: number): Task[] {
+  deleteTask(@Param('id') id: number): Promise<void> {
     return this.taskService.deleteTask(id);
   }
 }
