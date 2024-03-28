@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from './tasks.entity';
 
 @Entity()
 export class User {
@@ -8,4 +9,7 @@ export class User {
   username: string;
   @Column()
   password: string;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToMany((type) => Task, (task) => task.user, { eager: true })
+  task: Task[];
 }
