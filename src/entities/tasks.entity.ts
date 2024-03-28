@@ -1,5 +1,7 @@
 import { TaskStatus } from 'src/constants/enums';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task {
@@ -11,4 +13,8 @@ export class Task {
   description: string;
   @Column()
   status: TaskStatus;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @ManyToOne((_type) => User, (user) => user.task, { eager: false })
+  @Exclude({ toPlainOnly: true })
+  user: User;
 }

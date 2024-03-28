@@ -8,8 +8,9 @@ import { AuthCredentialDto } from 'src/dtos/user/auth-credentials.dto';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Response } from 'express';
+
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/interface/jwt-payload.interface';
 @Injectable()
 export class AuthService {
   constructor(
@@ -42,18 +43,16 @@ export class AuthService {
     //   }
     // }
   }
-  async signIn(authCredential: AuthCredentialDto, res: Response) {
-    try {
-      const { username, password } = authCredential;
-      const user = await this.userRepository.findOne({ where: { username } });
-
-      if (!user || !(await bcrypt.compare(password, user.password))) {
-        throw new UnauthorizedException('Incorrect credentials');
-      }
-      const accessToken = await this.jwtService.sign(username);
-      return res.status(200).json({ message: accessToken });
-    } catch (error) {
-      return res.status(401).json({ message: error.message });
+  async signIn(
+    authCredential: AuthCredentialDto,
+  ): Promise<{ accessToken: string }> {
+    const { username, password } = authCredential;
+    const user = await this.userRepository.findOne({ where: { username } });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const payload: JwtPayload = { username };
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken };
     }
+    throw new UnauthorizedException('PLease check your login credentials');
   }
 }
