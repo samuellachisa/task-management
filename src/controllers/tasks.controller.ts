@@ -24,11 +24,11 @@ import { GetUser } from 'src/utility/get-user.decorator';
 export class TasksController {
   constructor(private taskService: TasksService) {}
   @Get()
-  getAllTasks(@Query() filterDto: GetTasksFilterDto) {
+  getAllTasks(@Query() filterDto: GetTasksFilterDto, @GetUser() user: User) {
     if (Object.keys(filterDto).length) {
-      return this.taskService.getAllTasksWithFilter(filterDto);
+      return this.taskService.getAllTasksWithFilter(filterDto, user);
     } else {
-      return this.taskService.getAllTasks();
+      return this.taskService.getAllTasks(user);
     }
   }
   @Get('/:id')
