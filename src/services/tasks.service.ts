@@ -14,13 +14,16 @@ export class TasksService {
     @InjectRepository(Task) private taskRepository: Repository<Task>,
   ) {}
   // private tasks: Task[] = [];
-  getAllTasks(): Promise<Task[]> {
-    return this.taskRepository.find();
+  async getAllTasks(user: User): Promise<Task[]> {
+    const query = this.taskRepository.createQueryBuilder('task');
+    query.where({ user });
+    return await query.getMany();
   }
 
-  async getAllTasksWithFilter(filterDto: GetTasksFilterDto) {
+  async getAllTasksWithFilter(filterDto: GetTasksFilterDto, user: User) {
     const { status, search } = filterDto;
     const query = this.taskRepository.createQueryBuilder('task');
+    query.where({ user });
     if (status) {
       query.andWhere('task.status = :status', { status });
     }
