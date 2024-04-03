@@ -3,7 +3,6 @@ import { TaskStatus } from 'src/constants/enums';
 
 export class GetTasksFilterDto {
   @IsOptional()
-  @IsEnum(TaskStatus)
   status?: TaskStatus;
   @IsOptional()
   @IsString()
