@@ -1,4 +1,4 @@
-import { TaskStatus } from 'src/constants/enums';
+import { TaskStatus } from '../constants/enums';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Exclude } from 'class-transformer';
