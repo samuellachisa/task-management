@@ -1,3 +1,4 @@
+import { GetTasksFilterDto } from './../dtos/tasks/get-tasks-filter.dto';
 import { TaskRepository } from './../repository/task-repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
@@ -5,8 +6,16 @@ import { Repository } from 'typeorm';
 import { Task } from '../entities/tasks.entity';
 import { getRepositoryToken } from '@nestjs/typeorm'; // Import getRepositoryToken
 
-const mockTaskRepository = () => ({}); // Mock implementation of TaskRepository
+const mockTaskRepository = () => ({
+  getTasks: jest.fn(),
+}); // Mock implementation of TaskRepository
 
+const mockUser = {
+  username: 'Ariel',
+  id: 1,
+  password: 'test',
+  task: [],
+};
 describe('TaskService', () => {
   let taskService: TasksService;
   let taskRepository: Repository<Task>;
@@ -29,5 +38,11 @@ describe('TaskService', () => {
   it('should be defined', () => {
     expect(taskService).toBeDefined();
     expect(taskRepository).toBeDefined();
+  });
+
+  describe('getTasks', () => {
+    it('calls task repository and returns the result', () => {
+      expect(taskService.getAllTasks(mockUser)).toHaveBeenCalled();
+    });
   });
 });

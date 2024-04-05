@@ -21,14 +21,16 @@ export class TasksService {
   ) {}
   // private tasks: Task[] = [];
   async getAllTasks(user: User): Promise<Task[]> {
-    const query = this.taskRepository.createQueryBuilder('task');
+    const query = this.taskRepository?.createQueryBuilder('task');
     query.where({ user });
     return await query.getMany();
   }
 
-  async getAllTasksWithFilter(filterDto: GetTasksFilterDto, user: User) {
-    const { status, search } = filterDto;
-    const query = this.taskRepository.createQueryBuilder('task');
+  async getAllTasksWithFilter(filterDto: any, user: any) {
+    let { status, search } = filterDto;
+    status = status ? status : undefined;
+    search = search ? search : undefined;
+    const query = this.taskRepository?.createQueryBuilder('task');
     query.where({ user });
     if (status) {
       query.andWhere('task.status = :status', { status });
